@@ -3,7 +3,8 @@ package HeartsGame;
 import java.util.ArrayList;
 
 /**
- *
+ * This class represents the Deck for the Hearts game
+ * 
  * @author Emmanouil Paterakis
  */
 public class Deck {

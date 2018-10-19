@@ -14,7 +14,8 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 /**
- *
+ * Main frame for the game, where all the visible game objects are located
+ * 
  * @author Emmanouil Paterakis
  */
 public class MainFrame extends JFrame {
@@ -127,6 +128,7 @@ public class MainFrame extends JFrame {
 
         // JFrame config
         pack();
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Hearts Game");
         setVisible(true);

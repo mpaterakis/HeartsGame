@@ -2,11 +2,11 @@ package Human;
 
 import HeartsGame.Card;
 import HeartsGame.Deck;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
- *
+ * This class represents the Dealer for the Hearts game
+ * 
  * @author Emmanouil Paterakis
  */
 public class HeartsDealer extends Human implements CardsDealer {

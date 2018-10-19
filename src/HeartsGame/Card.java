@@ -9,7 +9,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
- *
+ * This class represents the Card for the Hearts game
+ * 
  * @author Emmanouil Paterakis
  */
 public class Card extends JLabel {

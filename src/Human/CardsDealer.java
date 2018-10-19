@@ -3,7 +3,8 @@ package Human;
 import HeartsGame.Card;
 
 /**
- *
+ * This interface includes the basic Dealer behavior for the Hearts game
+ * 
  * @author Emmanouil Paterakis
  */
 public interface CardsDealer {

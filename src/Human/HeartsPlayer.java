@@ -4,7 +4,8 @@ import HeartsGame.Card;
 import java.util.ArrayList;
 
 /**
- *
+ * This class represents the Player for the Hearts game
+ * 
  * @author Emmanouil Paterakis
  */
 public class HeartsPlayer extends Human implements CardsPlayer {

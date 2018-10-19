@@ -1,10 +1,10 @@
 package Human;
 
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 /**
- *
+ * This class represents the Human
+ * 
  * @author Emmanouil Paterakis
  */
 public abstract class Human {
