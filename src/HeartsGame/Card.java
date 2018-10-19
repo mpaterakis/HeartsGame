@@ -20,6 +20,8 @@ public class Card extends JLabel {
             this.symbol = symbol;
             this.number = number;
             this.cardHidden = cardHidden;
+            
+            // Set card icon
             InputStream stream;
             if (cardHidden) {
                 stream = getClass().getResourceAsStream("/Icons/backview.png");
@@ -39,6 +41,26 @@ public class Card extends JLabel {
             number = " ";
             symbol = ' ';
             InputStream stream = getClass().getResourceAsStream("/Icons/empty.png");
+            cardIcon = new ImageIcon(ImageIO.read(stream));
+            setIcon(new ImageIcon(cardIcon.getImage()));
+        } catch (IOException ex) {
+            Logger.getLogger(Card.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    // Custom method
+    public void flipCard() {
+        try {
+            cardHidden = !cardHidden;
+            
+            // Set card icon
+            InputStream stream;
+            if (cardHidden) {
+                stream = getClass().getResourceAsStream("/Icons/backview.png");
+            } else {
+                stream = getClass().getResourceAsStream("/Icons/"
+                        + symbol + number + ".png");
+            }
             cardIcon = new ImageIcon(ImageIO.read(stream));
             setIcon(new ImageIcon(cardIcon.getImage()));
         } catch (IOException ex) {

@@ -28,6 +28,7 @@ public class HeartsDealer extends Human implements CardsDealer {
             deckPanel.add(deck.getCards().get(i));
         }
         deckPanel.revalidate();
+        infoArea.setText("-Dealer-\n\nShowing deck.");
     }
 
     @Override
@@ -37,11 +38,12 @@ public class HeartsDealer extends Human implements CardsDealer {
 
     @Override
     public void dealToPlayers(HeartsPlayer player1, HeartsPlayer player2) {
+        deckPanel.removeAll();
+        deckPanel.revalidate();
     }
 
     @Override
     public void decideWinner(HeartsPlayer player1, HeartsPlayer player2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

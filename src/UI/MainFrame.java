@@ -5,7 +5,6 @@ import Human.HeartsPlayer;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,22 +41,33 @@ public class MainFrame extends JFrame {
 
         // JTextArea
         infoArea = new JTextArea("Welcome to my game!");
+        infoArea.setEditable(false);
 
         // JButtons
         p1IntroduceBtn = new JButton("Introduce");
-        p1ShowHandBtn = new JButton("Show hand");
         p2IntroduceBtn = new JButton("Introduce");
+        dealerIntroduceBtn = new JButton("Introduce");
+        p1ShowHandBtn = new JButton("Show hand");
         p2ShowHandBtn = new JButton("Show hand");
         dealBtn = new JButton("Deal");
-        dealerIntroduceBtn = new JButton("Introduce");
         showDeckBtn = new JButton("Show Deck");
         decideWinnerBtn = new JButton("Decide Winner");
-        
+
+        p1ShowHandBtn.setEnabled(false);
+        p2ShowHandBtn.setEnabled(false);
+        dealBtn.setEnabled(false);
+        showDeckBtn.setEnabled(false);
+        decideWinnerBtn.setEnabled(false);
+
         // Add ActionListeners
-        showDeckBtn.addActionListener(e -> dealer.showDeck());
-        p1IntroduceBtn.addActionListener(e -> player1.introduceSelf());
-        p2IntroduceBtn.addActionListener(e -> player2.introduceSelf());
-        dealerIntroduceBtn.addActionListener(e -> dealer.introduceSelf());
+        showDeckBtn.addActionListener(e -> doShowDeck());
+        p1IntroduceBtn.addActionListener(e -> doIntroducePlayer(1));
+        p2IntroduceBtn.addActionListener(e -> doIntroducePlayer(2));
+        dealerIntroduceBtn.addActionListener(e -> doIntroduceDealer());
+        dealBtn.addActionListener(e -> doDeal());
+        p1ShowHandBtn.addActionListener(e -> doShowHand(1));
+        p2ShowHandBtn.addActionListener(e -> doShowHand(2));
+        decideWinnerBtn.addActionListener(e -> doDecideWinner());
 
         // JLabels
         p1Label = new JLabel("Player 1", SwingConstants.CENTER);
@@ -125,6 +135,67 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+    // Custom methods
+    private void doIntroduceDealer() {
+        dealer.introduceSelf();
+        dealerIntroduceBtn.setEnabled(false);
+        tryEnablingShowDeckButton();
+    }
+
+    private void doIntroducePlayer(int playerNumber) {
+        if (playerNumber == 1) {
+            player1.introduceSelf();
+            p1IntroduceBtn.setEnabled(false);
+        } else if (playerNumber == 2) {
+            player2.introduceSelf();
+            p2IntroduceBtn.setEnabled(false);
+        }
+        tryEnablingShowDeckButton();
+    }
+
+    private void doShowDeck() {
+        dealer.showDeck();
+        showDeckBtn.setEnabled(false);
+        dealBtn.setEnabled(true);
+    }
+
+    private void doDeal() {
+        dealer.dealToPlayers(player1, player2);
+        dealBtn.setEnabled(false);
+
+        p1ShowHandBtn.setEnabled(true);
+        p2ShowHandBtn.setEnabled(true);
+    }
+
+    private void doShowHand(int playerNumber) {
+        if (playerNumber == 1) {
+            player1.showHand();
+            p1ShowHandBtn.setEnabled(false);
+        } else if (playerNumber == 2) {
+            player2.showHand();
+            p2ShowHandBtn.setEnabled(false);
+        }
+        tryEnablingDecideWinnerButton();
+    }
+    
+    private void doDecideWinner() {
+        dealer.decideWinner(player1, player2);
+        decideWinnerBtn.setEnabled(false);
+        showDeckBtn.setEnabled(true);
+    }
+
+    private void tryEnablingShowDeckButton() {
+        if (!p1IntroduceBtn.isEnabled() && !p2IntroduceBtn.isEnabled() && !dealerIntroduceBtn.isEnabled()) {
+            showDeckBtn.setEnabled(true);
+        }
+    }
+    
+    private void tryEnablingDecideWinnerButton() {
+        if (!p1ShowHandBtn.isEnabled() && !p2ShowHandBtn.isEnabled()) {
+            decideWinnerBtn.setEnabled(true);
+        }
+    }
+
     // Fields
     private JPanel bottomPanel, actionsPanel, p1Panel, p2Panel, dealerPanel,
             p1DeckPanel, p2DeckPanel, deckPanel, gamePanel;
@@ -135,4 +206,6 @@ public class MainFrame extends JFrame {
     private JLabel p1Label, p2Label, dealerLabel;
     private HeartsDealer dealer;
     private HeartsPlayer player1, player2;
+
+
 }
