@@ -1,5 +1,6 @@
 package Human;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -9,23 +10,23 @@ import javax.swing.JTextField;
 public abstract class Human {
 
     // Constructors    
-    public Human() {
-        this.firstName = "";
-        this.lastName = "";
-        this.description = "";
-        this.age = 0;
+    public Human(){
+        this(" "," "," ",0);
     };
     
-    public Human(JTextField infoTf){
-        this("","","",0,infoTf);
-    };
-    
-    public Human(String firstName, String lastName, String description, int age, JTextField infoTf) {
+    public Human(String firstName, String lastName, String description, int age, JTextArea infoArea) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
         this.age = age;
-        this.infoTf = infoTf;
+        this.infoArea = infoArea;
+    };
+    
+    public Human(String firstName, String lastName, String description, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.description = description;
+        this.age = age;
     };
     
     // Getters and Setters
@@ -60,14 +61,19 @@ public abstract class Human {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public JTextArea getInfoArea() {
+        return infoArea;
+    }
+
+    public void setInfoArea(JTextArea infoArea) {
+        this.infoArea = infoArea;
+    }
     
     // Custom methods
-    public void introduceSelf() {
-        //
-    };
-    
+    public abstract void introduceSelf();
     // Fields
-    private String firstName, lastName, description;
-    private int age;
-    private JTextField infoTf; 
+    protected String firstName, lastName, description;
+    protected int age;
+    protected JTextArea infoArea; 
 }

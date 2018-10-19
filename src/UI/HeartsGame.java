@@ -10,7 +10,7 @@ public class HeartsGame {
      * HeartsGame class
      */
     public static void main(String[] args) {
-        new MainFrame();
+        new InfoInputDialog();
     }
     
 }
