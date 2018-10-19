@@ -22,10 +22,12 @@ public class HeartsPlayer extends Human implements CardsPlayer {
     }
 
     // Custom methods
+    // Shows the cards that the player has on their hand    
     @Override
     public void showHand() {
     }
 
+    // Show introductory message with player's info
     @Override
     public void introduceSelf() {
         String message = "-Player " + playerNumber + "-\n\nHi! I'm " + firstName
@@ -33,6 +35,7 @@ public class HeartsPlayer extends Human implements CardsPlayer {
         infoArea.setText(message);
     }
 
+    // Initialize hand (player's deck) at the start of each game
     private void initHand() {
         cardsInHand = new ArrayList<Card>();
         for (int i = 0; i < 5; i++) {

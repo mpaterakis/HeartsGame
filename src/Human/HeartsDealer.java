@@ -3,7 +3,6 @@ package Human;
 import HeartsGame.Card;
 import HeartsGame.Deck;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  *
@@ -22,6 +21,7 @@ public class HeartsDealer extends Human implements CardsDealer {
     }
 
     // Overriden classes
+    // Show all cards from the deck
     @Override
     public void showDeck() {
         for (int i = 0; i < deck.getCards().size(); i++) {
@@ -31,21 +31,25 @@ public class HeartsDealer extends Human implements CardsDealer {
         infoArea.setText("-Dealer-\n\nShowing deck.");
     }
 
+    // Deal (return) a random card
     @Override
     public Card dealRandomCard() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    // Deal cards to players
     @Override
     public void dealToPlayers(HeartsPlayer player1, HeartsPlayer player2) {
         deckPanel.removeAll();
         deckPanel.revalidate();
     }
 
+    // Decide and announce the winner
     @Override
     public void decideWinner(HeartsPlayer player1, HeartsPlayer player2) {
     }
 
+    // Show introductory message with dealer's info
     @Override
     public void introduceSelf() {
         String message = "-Dealer-\n\nHello gents. I'm " + firstName + " " + lastName
