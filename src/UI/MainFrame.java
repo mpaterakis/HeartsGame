@@ -84,7 +84,8 @@ public class MainFrame extends JFrame {
         deckPanel = new JPanel(new GridLayout(11, 5));
         p1DeckPanel = new JPanel(new FlowLayout());
         p2DeckPanel = new JPanel(new FlowLayout());
-
+        
+        // Set up JPanels
         p1Panel.add(p1Label);
         JPanel p1ButtonsPanel = new JPanel(new FlowLayout());
         p1ButtonsPanel.add(p1IntroduceBtn);
@@ -105,30 +106,32 @@ public class MainFrame extends JFrame {
         dealerButtonsPanel.add(decideWinnerBtn);
         dealerPanel.add(dealerButtonsPanel);
 
-        actionsPanel.add(p1Panel);
-        actionsPanel.add(dealerPanel);
-        actionsPanel.add(p2Panel);
 
+        // Add players' cards (which are empty at this moment) to their decks
         for (int i = 0; i < player1.getCardsInHand().size(); i++) {
             p1DeckPanel.add(player1.getCardsInHand().get(i));
         }
-
         for (int i = 0; i < player2.getCardsInHand().size(); i++) {
             p2DeckPanel.add(player2.getCardsInHand().get(i));
         }
 
+        // Set deckPanel as the View for scrollPane
         deckScrollPane.setViewportView(deckPanel);
 
+        // Add all the JPanels together
+        actionsPanel.add(p1Panel);
+        actionsPanel.add(dealerPanel);
+        actionsPanel.add(p2Panel);
         gamePanel.add(p1DeckPanel);
         gamePanel.add(deckScrollPane);
         gamePanel.add(infoArea);
         gamePanel.add(p2DeckPanel);
-
         bottomPanel.add(gamePanel, BorderLayout.EAST);
         bottomPanel.add(actionsPanel, BorderLayout.WEST);
 
         add(bottomPanel);
 
+        // JFrame config
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Hearts Game");
@@ -136,12 +139,14 @@ public class MainFrame extends JFrame {
     }
 
     // Custom methods
+    // Introduce dealer action
     private void doIntroduceDealer() {
         dealer.introduceSelf();
         dealerIntroduceBtn.setEnabled(false);
         tryEnablingShowDeckButton();
     }
 
+    // Introduce player action
     private void doIntroducePlayer(int playerNumber) {
         if (playerNumber == 1) {
             player1.introduceSelf();
@@ -153,12 +158,14 @@ public class MainFrame extends JFrame {
         tryEnablingShowDeckButton();
     }
 
+    // Show deck action
     private void doShowDeck() {
         dealer.showDeck();
         showDeckBtn.setEnabled(false);
         dealBtn.setEnabled(true);
     }
 
+    // Deal action
     private void doDeal() {
         dealer.dealToPlayers(player1, player2);
         dealBtn.setEnabled(false);
@@ -167,6 +174,7 @@ public class MainFrame extends JFrame {
         p2ShowHandBtn.setEnabled(true);
     }
 
+    // Show hand action
     private void doShowHand(int playerNumber) {
         if (playerNumber == 1) {
             player1.showHand();
@@ -178,18 +186,21 @@ public class MainFrame extends JFrame {
         tryEnablingDecideWinnerButton();
     }
     
+    // Decide winner action
     private void doDecideWinner() {
         dealer.decideWinner(player1, player2);
         decideWinnerBtn.setEnabled(false);
         showDeckBtn.setEnabled(true);
     }
 
+    // Try to enable the "Show Deck" button. All "Introduce" buttons must be pressed.
     private void tryEnablingShowDeckButton() {
         if (!p1IntroduceBtn.isEnabled() && !p2IntroduceBtn.isEnabled() && !dealerIntroduceBtn.isEnabled()) {
             showDeckBtn.setEnabled(true);
         }
     }
     
+    // Try to enable the "Decide Winner" button. All "Show Hand" buttons must be pressed.
     private void tryEnablingDecideWinnerButton() {
         if (!p1ShowHandBtn.isEnabled() && !p2ShowHandBtn.isEnabled()) {
             decideWinnerBtn.setEnabled(true);

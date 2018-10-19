@@ -8,18 +8,17 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 /**
+ * Dialog for inserting the players' and dealer's info
  *
  * @author Emmanouil Paterakis
  */
 public class InfoInputDialog extends JDialog {
-    
+
     public InfoInputDialog() {
 
         // JLabels
@@ -63,7 +62,7 @@ public class InfoInputDialog extends JDialog {
         p1Panel = new JPanel(new GridLayout(4, 2));
         p2Panel = new JPanel(new GridLayout(4, 2));
         buttonsPanel = new JPanel(new FlowLayout());
-        
+
         p1Panel.add(p1FnameLabel);
         p1Panel.add(p1FnameField);
         p1Panel.add(p1LnameLabel);
@@ -73,7 +72,7 @@ public class InfoInputDialog extends JDialog {
         p1Panel.add(p1DescLabel);
         p1Panel.add(p1DescField);
         p1Panel.setBorder(BorderFactory.createTitledBorder("Player 1"));
-        
+
         p2Panel.add(p2FnameLabel);
         p2Panel.add(p2FnameField);
         p2Panel.add(p2LnameLabel);
@@ -83,7 +82,7 @@ public class InfoInputDialog extends JDialog {
         p2Panel.add(p2DescLabel);
         p2Panel.add(p2DescField);
         p2Panel.setBorder(BorderFactory.createTitledBorder("Player 2"));
-        
+
         dealerPanel.add(dealerFnameLabel);
         dealerPanel.add(dealerFnameField);
         dealerPanel.add(dealerLnameLabel);
@@ -93,43 +92,64 @@ public class InfoInputDialog extends JDialog {
         dealerPanel.add(dealerDescLabel);
         dealerPanel.add(dealerDescField);
         dealerPanel.setBorder(BorderFactory.createTitledBorder("Dealer"));
-        
+
         buttonsPanel.add(okButton);
         buttonsPanel.add(exitButton);
-        
+
         mainPanel.add(p1Panel);
         mainPanel.add(p2Panel);
         mainPanel.add(dealerPanel);
-        
+
         bottomPanel.add(mainPanel, BorderLayout.CENTER);
         bottomPanel.add(buttonsPanel, BorderLayout.SOUTH);
-        
+
         add(bottomPanel);
-        
+
+        // JDialog config
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
 
     // Custom methods
+    // Ok button action
     private void doOk() {
+        // If ages' textFields are left empty, set according age to 0
         int p1Age = 0, p2Age = 0, dealerAge = 0;
+
         if (!p1AgeField.getText().isEmpty()) {
-            p1Age = Integer.valueOf(p1AgeField.getText());
+            try {
+                p1Age = Integer.valueOf(p1AgeField.getText());
+            } catch (NumberFormatException ex) {
+                // If the AgeField has an incompatible value, its age remains zero                
+            }
         }
+
         if (!p2AgeField.getText().isEmpty()) {
-            p2Age = Integer.valueOf(p2AgeField.getText());
+            try {
+                p2Age = Integer.valueOf(p2AgeField.getText());
+            } catch (NumberFormatException ex) {
+                // If the AgeField has an incompatible value, its age remains zero        
+            }
         }
+
         if (!dealerAgeField.getText().isEmpty()) {
-            dealerAge = Integer.valueOf(dealerAgeField.getText());
+            try {
+                dealerAge = Integer.valueOf(dealerAgeField.getText());
+            } catch (NumberFormatException ex) {
+                // If the AgeField has an incompatible value, its age remains zero        
+            }
         }
+
         HeartsPlayer player1 = new HeartsPlayer(p1FnameField.getText(), p1LnameField.getText(), p1DescField.getText(), p1Age, 1);
         HeartsPlayer player2 = new HeartsPlayer(p2FnameField.getText(), p2LnameField.getText(), p2DescField.getText(), p2Age, 2);
         HeartsDealer dealer = new HeartsDealer(dealerFnameField.getText(), dealerLnameField.getText(), dealerDescField.getText(), dealerAge);
-        
+
+        // Create the main frame
         new MainFrame(player1, player2, dealer);
+
+        // Close this dialog
         dispose();
     }
 
