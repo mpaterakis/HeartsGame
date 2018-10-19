@@ -70,8 +70,8 @@ public class MainFrame extends JFrame {
         decideWinnerBtn.addActionListener(e -> doDecideWinner());
 
         // JLabels
-        p1Label = new JLabel("Player 1", SwingConstants.CENTER);
-        p2Label = new JLabel("Player 2", SwingConstants.CENTER);
+        p1Label = new JLabel("Player 1   |   Points: 0", SwingConstants.CENTER);
+        p2Label = new JLabel("Player 2   |   Points: 0", SwingConstants.CENTER);
         dealerLabel = new JLabel("Dealer", SwingConstants.CENTER);
 
         // JPanels
@@ -106,14 +106,8 @@ public class MainFrame extends JFrame {
         dealerButtonsPanel.add(decideWinnerBtn);
         dealerPanel.add(dealerButtonsPanel);
 
-
         // Add players' cards (which are empty at this moment) to their decks
-        for (int i = 0; i < player1.getCardsInHand().size(); i++) {
-            p1DeckPanel.add(player1.getCardsInHand().get(i));
-        }
-        for (int i = 0; i < player2.getCardsInHand().size(); i++) {
-            p2DeckPanel.add(player2.getCardsInHand().get(i));
-        }
+        refreshPlayerDeckPanels();
 
         // Set deckPanel as the View for scrollPane
         deckScrollPane.setViewportView(deckPanel);
@@ -169,9 +163,11 @@ public class MainFrame extends JFrame {
     private void doDeal() {
         dealer.dealToPlayers(player1, player2);
         dealBtn.setEnabled(false);
-
+        
         p1ShowHandBtn.setEnabled(true);
         p2ShowHandBtn.setEnabled(true);
+        
+        refreshPlayerDeckPanels();
     }
 
     // Show hand action
@@ -189,8 +185,14 @@ public class MainFrame extends JFrame {
     // Decide winner action
     private void doDecideWinner() {
         dealer.decideWinner(player1, player2);
+        
         decideWinnerBtn.setEnabled(false);
         showDeckBtn.setEnabled(true);
+        
+        refreshPlayerDeckPanels();
+        
+        p1Label.setText("Player 1   |   Points: " + player1.getPoints());
+        p2Label.setText("Player 2   |   Points: " + player2.getPoints());
     }
 
     // Try to enable the "Show Deck" button. All "Introduce" buttons must be pressed.
@@ -206,6 +208,21 @@ public class MainFrame extends JFrame {
             decideWinnerBtn.setEnabled(true);
         }
     }
+    
+    // Refresh the players' deck panels
+    private void refreshPlayerDeckPanels() {
+        p1DeckPanel.removeAll();
+        for (int i = 0; i < player1.getCardsInHand().size(); i++) {
+            p1DeckPanel.add(player1.getCardsInHand().get(i));
+        }
+        p1DeckPanel.revalidate();
+        
+        p2DeckPanel.removeAll();
+        for (int i = 0; i < player2.getCardsInHand().size(); i++) {
+            p2DeckPanel.add(player2.getCardsInHand().get(i));
+        }
+        p2DeckPanel.revalidate();
+    }
 
     // Fields
     private JPanel bottomPanel, actionsPanel, p1Panel, p2Panel, dealerPanel,
@@ -217,6 +234,4 @@ public class MainFrame extends JFrame {
     private JLabel p1Label, p2Label, dealerLabel;
     private HeartsDealer dealer;
     private HeartsPlayer player1, player2;
-
-
 }

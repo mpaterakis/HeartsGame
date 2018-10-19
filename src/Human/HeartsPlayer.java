@@ -25,6 +25,18 @@ public class HeartsPlayer extends Human implements CardsPlayer {
     // Shows the cards that the player has on their hand    
     @Override
     public void showHand() {
+        // Flip cards
+        int heartsNum = 0;
+        for (int i = 0; i < cardsInHand.size(); i++) {
+            cardsInHand.get(i).flipCard();
+            if (cardsInHand.get(i).getSymbol() == '#'){
+                heartsNum++;
+            }
+        }
+        
+        // Update message
+        infoArea.setText("-Player " + playerNumber + "-\n\nShowing hand...\n\n"
+                + "Player " + playerNumber + " has " + heartsNum + " Hearts.");
     }
 
     // Show introductory message with player's info
@@ -36,7 +48,7 @@ public class HeartsPlayer extends Human implements CardsPlayer {
     }
 
     // Initialize hand (player's deck) at the start of each game
-    private void initHand() {
+    public void initHand() {
         cardsInHand = new ArrayList<Card>();
         for (int i = 0; i < 5; i++) {
             cardsInHand.add(new Card());
@@ -52,8 +64,16 @@ public class HeartsPlayer extends Human implements CardsPlayer {
         this.cardsInHand = cardsInHand;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     // Fields
     private ArrayList<Card> cardsInHand;
-    private int playerNumber;
+    private int playerNumber, points = 0;
 
 }

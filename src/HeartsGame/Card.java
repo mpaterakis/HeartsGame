@@ -63,9 +63,15 @@ public class Card extends JLabel {
             }
             cardIcon = new ImageIcon(ImageIO.read(stream));
             setIcon(new ImageIcon(cardIcon.getImage()));
+            
         } catch (IOException ex) {
             Logger.getLogger(Card.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    // Getter
+    public char getSymbol() {
+        return symbol;
     }
 
     // Fields
