@@ -98,7 +98,7 @@ public class HeartsDealer extends Human implements CardsDealer {
             infoArea.setText("-Dealer-\n\nPlayer 2 wins! They get " + points + " points!");
             player2.setPoints(points + player2.getPoints());
         } else {
-            int points = (p1Hearts - p2Hearts) * 10 + player1.getPoints();
+            int points = (p1Hearts - p2Hearts) * 10;
             infoArea.setText("-Dealer-\n\nPlayer 1 wins! They get " + points + " points!");
             player1.setPoints(points + player1.getPoints());
         }
