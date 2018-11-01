@@ -1,6 +1,7 @@
 package Human;
 
 import HeartsGame.Card;
+import java.util.ArrayList;
 
 /**
  * This interface includes the basic Dealer behavior for the Hearts game
@@ -16,8 +17,8 @@ public interface CardsDealer {
     Card dealRandomCard();
 
     // Deals cards to the players
-    void dealToPlayers(HeartsPlayer player1, HeartsPlayer player2);
+    void dealToPlayers(ArrayList<HeartsPlayer> players);
     
     // Decides game winner
-    void decideWinner(HeartsPlayer player1, HeartsPlayer player2);
+    void decideWinner(ArrayList<HeartsPlayer> players);
 }

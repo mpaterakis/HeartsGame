@@ -5,6 +5,7 @@ import Human.HeartsPlayer;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,12 +16,28 @@ import javax.swing.SwingConstants;
 
 /**
  * Main frame for the game, where all the visible game objects are located
- * 
+ *
  * @author Emmanouil Paterakis
  */
 public class MainFrame extends JFrame {
 
-    // Constructor
+    // Constructors
+    public MainFrame(HeartsPlayer player1, HeartsPlayer player2, HeartsPlayer player3, HeartsDealer dealer) {
+        this(player1, player2, dealer);
+        playerNum = 3;
+        this.player3 = player3;
+        setupP3P4Components();
+        player3.setInfoArea(infoArea);
+    }
+
+    public MainFrame(HeartsPlayer player1, HeartsPlayer player2, HeartsPlayer player3, HeartsPlayer player4, HeartsDealer dealer) {
+        this(player1, player2, player3, dealer);
+        playerNum = 4;
+        this.player4 = player4;
+        setupP3P4Components();
+        player4.setInfoArea(infoArea);
+    }
+
     public MainFrame(HeartsPlayer player1, HeartsPlayer player2, HeartsDealer dealer) {
         this.player1 = player1;
         this.player2 = player2;
@@ -47,32 +64,43 @@ public class MainFrame extends JFrame {
         // JButtons
         p1IntroduceBtn = new JButton("Introduce");
         p2IntroduceBtn = new JButton("Introduce");
+        p3IntroduceBtn = new JButton("Introduce");
+        p4IntroduceBtn = new JButton("Introduce");
         dealerIntroduceBtn = new JButton("Introduce");
         p1ShowHandBtn = new JButton("Show hand");
         p2ShowHandBtn = new JButton("Show hand");
+        p3ShowHandBtn = new JButton("Show hand");
+        p4ShowHandBtn = new JButton("Show hand");
         dealBtn = new JButton("Deal");
         showDeckBtn = new JButton("Show Deck");
         decideWinnerBtn = new JButton("Decide Winner");
 
         p1ShowHandBtn.setEnabled(false);
         p2ShowHandBtn.setEnabled(false);
+        p3ShowHandBtn.setEnabled(false);
+        p4ShowHandBtn.setEnabled(false);
         dealBtn.setEnabled(false);
-        showDeckBtn.setEnabled(false);
         decideWinnerBtn.setEnabled(false);
 
         // Add ActionListeners
         showDeckBtn.addActionListener(e -> doShowDeck());
         p1IntroduceBtn.addActionListener(e -> doIntroducePlayer(1));
         p2IntroduceBtn.addActionListener(e -> doIntroducePlayer(2));
+        p3IntroduceBtn.addActionListener(e -> doIntroducePlayer(3));
+        p4IntroduceBtn.addActionListener(e -> doIntroducePlayer(4));
         dealerIntroduceBtn.addActionListener(e -> doIntroduceDealer());
         dealBtn.addActionListener(e -> doDeal());
         p1ShowHandBtn.addActionListener(e -> doShowHand(1));
         p2ShowHandBtn.addActionListener(e -> doShowHand(2));
+        p3ShowHandBtn.addActionListener(e -> doShowHand(3));
+        p4ShowHandBtn.addActionListener(e -> doShowHand(4));
         decideWinnerBtn.addActionListener(e -> doDecideWinner());
 
         // JLabels
         p1Label = new JLabel("Player 1   |   Points: 0", SwingConstants.CENTER);
         p2Label = new JLabel("Player 2   |   Points: 0", SwingConstants.CENTER);
+        p3Label = new JLabel("Player 3   |   Points: 0", SwingConstants.CENTER);
+        p4Label = new JLabel("Player 4   |   Points: 0", SwingConstants.CENTER);
         dealerLabel = new JLabel("Dealer", SwingConstants.CENTER);
 
         // JPanels
@@ -81,11 +109,16 @@ public class MainFrame extends JFrame {
         actionsPanel = new JPanel(new GridLayout(4, 1));
         p1Panel = new JPanel(new GridLayout(2, 1));
         p2Panel = new JPanel(new GridLayout(2, 1));
+        p3Panel = new JPanel(new GridLayout(2, 1));
+        p4Panel = new JPanel(new GridLayout(2, 1));
         dealerPanel = new JPanel(new GridLayout(2, 1));
         deckPanel = new JPanel(new GridLayout(11, 5));
         p1DeckPanel = new JPanel(new FlowLayout());
         p2DeckPanel = new JPanel(new FlowLayout());
-        
+        p3DeckPanel = new JPanel(new FlowLayout());
+        p4DeckPanel = new JPanel(new FlowLayout());
+        p3p4Panel = new JPanel(new GridLayout(4, 1));
+
         // Set up JPanels
         p1Panel.add(p1Label);
         JPanel p1ButtonsPanel = new JPanel(new FlowLayout());
@@ -98,6 +131,18 @@ public class MainFrame extends JFrame {
         p2ButtonsPanel.add(p2IntroduceBtn);
         p2ButtonsPanel.add(p2ShowHandBtn);
         p2Panel.add(p2ButtonsPanel);
+
+        p3Panel.add(p3Label);
+        JPanel p3ButtonsPanel = new JPanel(new FlowLayout());
+        p3ButtonsPanel.add(p3IntroduceBtn);
+        p3ButtonsPanel.add(p3ShowHandBtn);
+        p3Panel.add(p3ButtonsPanel);
+
+        p4Panel.add(p4Label);
+        JPanel p4ButtonsPanel = new JPanel(new FlowLayout());
+        p4ButtonsPanel.add(p4IntroduceBtn);
+        p4ButtonsPanel.add(p4ShowHandBtn);
+        p4Panel.add(p4ButtonsPanel);
 
         dealerPanel.add(dealerLabel);
         JPanel dealerButtonsPanel = new JPanel(new GridLayout(2, 2));
@@ -121,8 +166,9 @@ public class MainFrame extends JFrame {
         gamePanel.add(deckScrollPane);
         gamePanel.add(infoArea);
         gamePanel.add(p2DeckPanel);
-        bottomPanel.add(gamePanel, BorderLayout.EAST);
+        bottomPanel.add(gamePanel, BorderLayout.CENTER);
         bottomPanel.add(actionsPanel, BorderLayout.WEST);
+        bottomPanel.add(p3p4Panel, BorderLayout.EAST);
 
         add(bottomPanel);
 
@@ -138,7 +184,6 @@ public class MainFrame extends JFrame {
     // Introduce dealer action
     private void doIntroduceDealer() {
         dealer.introduceSelf();
-        dealerIntroduceBtn.setEnabled(false);
         tryEnablingShowDeckButton();
     }
 
@@ -146,10 +191,12 @@ public class MainFrame extends JFrame {
     private void doIntroducePlayer(int playerNumber) {
         if (playerNumber == 1) {
             player1.introduceSelf();
-            p1IntroduceBtn.setEnabled(false);
         } else if (playerNumber == 2) {
             player2.introduceSelf();
-            p2IntroduceBtn.setEnabled(false);
+        } else if (playerNumber == 3) {
+            player3.introduceSelf();
+        } else if (playerNumber == 4) {
+            player4.introduceSelf();
         }
         tryEnablingShowDeckButton();
     }
@@ -163,12 +210,18 @@ public class MainFrame extends JFrame {
 
     // Deal action
     private void doDeal() {
-        dealer.dealToPlayers(player1, player2);
+        dealer.dealToPlayers(getPlayersArray());
         dealBtn.setEnabled(false);
-        
+
         p1ShowHandBtn.setEnabled(true);
         p2ShowHandBtn.setEnabled(true);
-        
+        if (playerNum >= 3) {
+        }
+        p3ShowHandBtn.setEnabled(true);
+        if (playerNum == 4) {
+            p4ShowHandBtn.setEnabled(true);
+        }
+
         refreshPlayerDeckPanels();
     }
 
@@ -180,21 +233,33 @@ public class MainFrame extends JFrame {
         } else if (playerNumber == 2) {
             player2.showHand();
             p2ShowHandBtn.setEnabled(false);
+        } else if (playerNumber == 3) {
+            player3.showHand();
+            p3ShowHandBtn.setEnabled(false);
+        } else if (playerNumber == 4) {
+            player4.showHand();
+            p4ShowHandBtn.setEnabled(false);
         }
         tryEnablingDecideWinnerButton();
     }
-    
+
     // Decide winner action
     private void doDecideWinner() {
-        dealer.decideWinner(player1, player2);
-        
+        dealer.decideWinner(getPlayersArray());
+
         decideWinnerBtn.setEnabled(false);
         showDeckBtn.setEnabled(true);
-        
+
         refreshPlayerDeckPanels();
-        
+
         p1Label.setText("Player 1   |   Points: " + player1.getPoints());
         p2Label.setText("Player 2   |   Points: " + player2.getPoints());
+        if (playerNum >= 3) {
+            p3Label.setText("Player 3   |   Points: " + player3.getPoints());
+        }
+        if (playerNum == 4) {
+            p4Label.setText("Player 4   |   Points: " + player4.getPoints());
+        }
     }
 
     // Try to enable the "Show Deck" button. All "Introduce" buttons must be pressed.
@@ -203,14 +268,26 @@ public class MainFrame extends JFrame {
             showDeckBtn.setEnabled(true);
         }
     }
-    
+
     // Try to enable the "Decide Winner" button. All "Show Hand" buttons must be pressed.
     private void tryEnablingDecideWinnerButton() {
         if (!p1ShowHandBtn.isEnabled() && !p2ShowHandBtn.isEnabled()) {
-            decideWinnerBtn.setEnabled(true);
+            if (playerNum >= 3) {
+                if (!p3ShowHandBtn.isEnabled()) {
+                    if (playerNum == 4) {
+                        if (!p4ShowHandBtn.isEnabled()) {
+                            decideWinnerBtn.setEnabled(true);
+                        }
+                    } else {
+                        decideWinnerBtn.setEnabled(true);
+                    }
+                }
+            } else {
+                decideWinnerBtn.setEnabled(true);
+            }
         }
     }
-    
+
     // Refresh the players' deck panels
     private void refreshPlayerDeckPanels() {
         p1DeckPanel.removeAll();
@@ -218,22 +295,77 @@ public class MainFrame extends JFrame {
             p1DeckPanel.add(player1.getCardsInHand().get(i));
         }
         p1DeckPanel.revalidate();
-        
+
         p2DeckPanel.removeAll();
         for (int i = 0; i < player2.getCardsInHand().size(); i++) {
             p2DeckPanel.add(player2.getCardsInHand().get(i));
         }
         p2DeckPanel.revalidate();
+
+        if (playerNum >= 3) {
+            p3DeckPanel.removeAll();
+            for (int i = 0; i < player3.getCardsInHand().size(); i++) {
+                p3DeckPanel.add(player3.getCardsInHand().get(i));
+            }
+            p3DeckPanel.revalidate();
+        }
+
+        if (playerNum == 4) {
+            p4DeckPanel.removeAll();
+            for (int i = 0; i < player4.getCardsInHand().size(); i++) {
+                p4DeckPanel.add(player4.getCardsInHand().get(i));
+            }
+            p4DeckPanel.revalidate();
+        }
+    }
+
+    // Add player 2 and 3's components
+    private void setupP3P4Components() {
+        if (playerNum == 3) {
+            JPanel p3FullPanel = new JPanel(new FlowLayout());
+            p3FullPanel.add(p3DeckPanel);
+            p3FullPanel.add(p3Panel);
+            p3p4Panel.add(p3FullPanel);
+        }
+        if (playerNum == 4) {
+            JPanel p4FullPanel = new JPanel(new FlowLayout());
+            p4FullPanel.add(p4DeckPanel);
+            p4FullPanel.add(p4Panel);
+            p3p4Panel.add(new JLabel());
+            p3p4Panel.add(new JLabel());
+            p3p4Panel.add(p4FullPanel);
+        }
+        refreshPlayerDeckPanels();
+        pack();
+        setLocationRelativeTo(null);
+    }
+    
+    // Returns an arraylist of the players
+    private ArrayList<HeartsPlayer> getPlayersArray() {
+        ArrayList players = new ArrayList<HeartsPlayer>();
+        players.add(player1);
+        players.add(player2);
+        if (playerNum >= 3) {
+            players.add(player3);
+        }
+        if (playerNum == 4) {
+            players.add(player4);
+        }
+        
+        return players;
     }
 
     // Fields
-    private JPanel bottomPanel, actionsPanel, p1Panel, p2Panel, dealerPanel,
-            p1DeckPanel, p2DeckPanel, deckPanel, gamePanel;
-    private JButton p1IntroduceBtn, p2IntroduceBtn, p1ShowHandBtn, p2ShowHandBtn,
-            dealerIntroduceBtn, showDeckBtn, decideWinnerBtn, dealBtn;
+    private JPanel bottomPanel, actionsPanel, p1Panel, p2Panel, p3Panel, p4Panel, dealerPanel,
+            p1DeckPanel, p2DeckPanel, p3DeckPanel, p4DeckPanel, deckPanel, gamePanel,
+            p3p4Panel;
+    private JButton p1IntroduceBtn, p2IntroduceBtn, p3IntroduceBtn, p4IntroduceBtn,
+            p1ShowHandBtn, p2ShowHandBtn, p3ShowHandBtn, p4ShowHandBtn, dealerIntroduceBtn,
+            showDeckBtn, decideWinnerBtn, dealBtn;
     private JTextArea infoArea;
     private JScrollPane deckScrollPane;
-    private JLabel p1Label, p2Label, dealerLabel;
+    private JLabel p1Label, p2Label, p3Label, p4Label, dealerLabel;
     private HeartsDealer dealer;
-    private HeartsPlayer player1, player2;
+    private HeartsPlayer player1, player2, player3 = null, player4 = null;
+    private int playerNum = 2;
 }

@@ -2,11 +2,13 @@ package Human;
 
 import HeartsGame.Card;
 import HeartsGame.Deck;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JPanel;
 
 /**
  * This class represents the Dealer for the Hearts game
- * 
+ *
  * @author Emmanouil Paterakis
  */
 public class HeartsDealer extends Human implements CardsDealer {
@@ -48,7 +50,7 @@ public class HeartsDealer extends Human implements CardsDealer {
 
     // Deal cards to players
     @Override
-    public void dealToPlayers(HeartsPlayer player1, HeartsPlayer player2) {
+    public void dealToPlayers(ArrayList<HeartsPlayer> players) {
         // Clean deckPanel
         deckPanel.removeAll();
         deckPanel.revalidate();
@@ -58,54 +60,46 @@ public class HeartsDealer extends Human implements CardsDealer {
 
         // Get random card and make sure it's not in the players' hand
         for (int i = 0; i < 5; i++) {
-            // Player 1 gets one card
-            Card dealtCard = dealRandomCard();
-            player1.getCardsInHand().remove(0);
-            player1.getCardsInHand().add(dealtCard);
+            for (int j = 0; j < players.size(); j++) {
+                // Player gets one card
+                Card dealtCard = dealRandomCard();
+                players.get(j).getCardsInHand().remove(0);
+                players.get(j).getCardsInHand().add(dealtCard);
+            }
 
-            // Player 2 gets another card
-            dealtCard = dealRandomCard();
-            player2.getCardsInHand().remove(0);
-            player2.getCardsInHand().add(dealtCard);
         }
     }
 
     // Decide and announce the winner
     @Override
-    public void decideWinner(HeartsPlayer player1, HeartsPlayer player2) {
+    public void decideWinner(ArrayList<HeartsPlayer> players) {
         // Hearts counter for each player
-        int p1Hearts = 0, p2Hearts = 0;
+        ArrayList hearts = new ArrayList<>();
 
-        // Add the players' cards back to the dealer's deck
-        for (int i = 0; i < 5; i++) {
-            deck.getCards().add(player1.getCardsInHand().get(i));
-            deck.getCards().add(player2.getCardsInHand().get(i));
-
-            if (player1.getCardsInHand().get(i).getSymbol() == '#') {
-                p1Hearts++;
-            }
-            if (player2.getCardsInHand().get(i).getSymbol() == '#') {
-                p2Hearts++;
+        // Add the players' cards back to the dealer's deck and counting hearts for each
+        for (int i = 0; i < players.size(); i++) {
+            hearts.add(0);
+            for (int j = 0; j < 5; j++) {
+                deck.getCards().add(players.get(i).getCardsInHand().get(j));
+                if (players.get(i).getCardsInHand().get(j).getSymbol() == '#') {
+                    hearts.set(i, Integer.valueOf(hearts.get(i).toString()) + 1);
+                }
             }
         }
 
         // Decide the winner, update the message and add points
-        if (p1Hearts == p2Hearts) {
-            infoArea.setText("-Dealer-\n\nDraw!");
-        } else if (p1Hearts < p2Hearts) {
-            // Calculate points for the winner
-            int points = (p2Hearts - p1Hearts) * 10;
-            infoArea.setText("-Dealer-\n\nPlayer 2 wins! They get " + points + " points!");
-            player2.setPoints(points + player2.getPoints());
-        } else {
-            int points = (p1Hearts - p2Hearts) * 10;
-            infoArea.setText("-Dealer-\n\nPlayer 1 wins! They get " + points + " points!");
-            player1.setPoints(points + player1.getPoints());
-        }
+        infoArea.setText("-Dealer-\n\nCounting Points:");
 
-        // Reset player's hands
-        player1.initHand();
-        player2.initHand();
+        int maxHearts = Integer.valueOf(Collections.max(hearts).toString());
+        int pointsWon = maxHearts * 10;
+
+        for (int i = 0; i < players.size(); i++) {
+            if (hearts.get(i).equals(maxHearts)) {
+                infoArea.setText(infoArea.getText() + "\n\nPlayer " + (i + 1) + " got " + pointsWon + " points!");
+                players.get(i).setPoints(players.get(i).getPoints() + pointsWon);
+            }
+            players.get(i).initHand();
+        }
     }
 
     // Show introductory message with dealer's info
