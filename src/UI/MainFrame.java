@@ -162,6 +162,7 @@ public class MainFrame extends JFrame {
         // Add all the JPanels together
         actionsPanel.add(p1Panel);
         actionsPanel.add(dealerPanel);
+        actionsPanel.add(new JLabel());
         actionsPanel.add(p2Panel);
         topPlayersPanel.add(p1DeckPanel);
         bottomPlayersPanel.add(p2DeckPanel);
