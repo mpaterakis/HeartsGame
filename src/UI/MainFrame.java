@@ -117,7 +117,8 @@ public class MainFrame extends JFrame {
         p2DeckPanel = new JPanel(new FlowLayout());
         p3DeckPanel = new JPanel(new FlowLayout());
         p4DeckPanel = new JPanel(new FlowLayout());
-        p3p4Panel = new JPanel(new GridLayout(4, 1));
+        topPlayersPanel = new JPanel(new FlowLayout());
+        bottomPlayersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         // Set up JPanels
         p1Panel.add(p1Label);
@@ -162,13 +163,14 @@ public class MainFrame extends JFrame {
         actionsPanel.add(p1Panel);
         actionsPanel.add(dealerPanel);
         actionsPanel.add(p2Panel);
-        gamePanel.add(p1DeckPanel);
+        topPlayersPanel.add(p1DeckPanel);
+        bottomPlayersPanel.add(p2DeckPanel);
+        gamePanel.add(topPlayersPanel);
         gamePanel.add(deckScrollPane);
         gamePanel.add(infoArea);
-        gamePanel.add(p2DeckPanel);
+        gamePanel.add(bottomPlayersPanel);
         bottomPanel.add(gamePanel, BorderLayout.CENTER);
         bottomPanel.add(actionsPanel, BorderLayout.WEST);
-        bottomPanel.add(p3p4Panel, BorderLayout.EAST);
 
         add(bottomPanel);
 
@@ -322,24 +324,21 @@ public class MainFrame extends JFrame {
     // Add player 2 and 3's components
     private void setupP3P4Components() {
         if (playerNum == 3) {
-            JPanel p3FullPanel = new JPanel(new FlowLayout());
-            p3FullPanel.add(p3DeckPanel);
-            p3FullPanel.add(p3Panel);
-            p3p4Panel.add(p3FullPanel);
+            deckPanel.setLayout(new GridLayout(5, 11));
+            topPlayersPanel.add(new JLabel("<html>|<br/>|<br/></html>"));
+            topPlayersPanel.add(p3DeckPanel);
+            topPlayersPanel.add(p3Panel);
         }
         if (playerNum == 4) {
-            JPanel p4FullPanel = new JPanel(new FlowLayout());
-            p4FullPanel.add(p4DeckPanel);
-            p4FullPanel.add(p4Panel);
-            p3p4Panel.add(new JLabel());
-            p3p4Panel.add(new JLabel());
-            p3p4Panel.add(p4FullPanel);
+            bottomPlayersPanel.add(new JLabel("<html>|<br/>|<br/></html>"));
+            bottomPlayersPanel.add(p4DeckPanel);
+            bottomPlayersPanel.add(p4Panel);
         }
         refreshPlayerDeckPanels();
         pack();
         setLocationRelativeTo(null);
     }
-    
+
     // Returns an arraylist of the players
     private ArrayList<HeartsPlayer> getPlayersArray() {
         ArrayList players = new ArrayList<HeartsPlayer>();
@@ -351,14 +350,14 @@ public class MainFrame extends JFrame {
         if (playerNum == 4) {
             players.add(player4);
         }
-        
+
         return players;
     }
 
     // Fields
     private JPanel bottomPanel, actionsPanel, p1Panel, p2Panel, p3Panel, p4Panel, dealerPanel,
             p1DeckPanel, p2DeckPanel, p3DeckPanel, p4DeckPanel, deckPanel, gamePanel,
-            p3p4Panel;
+            bottomPlayersPanel, topPlayersPanel;
     private JButton p1IntroduceBtn, p2IntroduceBtn, p3IntroduceBtn, p4IntroduceBtn,
             p1ShowHandBtn, p2ShowHandBtn, p3ShowHandBtn, p4ShowHandBtn, dealerIntroduceBtn,
             showDeckBtn, decideWinnerBtn, dealBtn;
